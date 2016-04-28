@@ -1,0 +1,10 @@
+.form-signin{
+    max-width: 330px;
+    margin: 0 auto;
+}
+
+.navbar-brand{
+    background: url(../img/logo.PNG) no-repeat;
+    text-indent: -9999px;
+    width: 140px;
+}
