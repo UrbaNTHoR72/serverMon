@@ -8,11 +8,11 @@
         if ($_SESSION['perm'] <= 2){
             $message = "the perm is \"" . $_SESSION['perm'] . "\" so congrats";
         }else{
-            $message = "foobar";
+            header('location: status.php');
         }
         
     }else {
-        header('location: index.php');
+        header('location: status.php');
     }
 ?>
 

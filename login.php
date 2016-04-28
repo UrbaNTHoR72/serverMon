@@ -2,6 +2,10 @@
 
 session_start();
 
+if(isset($_SESSION['perm'])){
+    header('location: status.php');
+}
+
 require_once('../../connect/connect.php');
 require_once('../../connect/password.php');
 

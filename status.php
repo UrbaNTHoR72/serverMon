@@ -1,4 +1,12 @@
-<?php?>
+<?php
+
+    session_start();
+    
+    if(!(isset($_SESSION['perm']))){
+        header('location: login.php');
+    }
+    
+?>
 
 <!doctype html>
 <html>
