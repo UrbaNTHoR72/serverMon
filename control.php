@@ -5,7 +5,12 @@
     $message = "no session";
 
     if (isset($_SESSION['perm'])){
-        $message = "the perm is \"" . $_SESSION['perm'] . "\" so congrats";
+        if ($_SESSION['perm'] <= 2){
+            $message = "the perm is \"" . $_SESSION['perm'] . "\" so congrats";
+        }else{
+            $message = "foobar";
+        }
+        
     }else {
         header('location: index.php');
     }
