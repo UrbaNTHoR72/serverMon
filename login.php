@@ -22,8 +22,8 @@ if(isset($_POST['submit'])){
            if(count($results) > 0 && password_verify($_POST['pass'], $results['password'])){
                $_SESSION['user'] = $results['user_name'];
                $_SESSION['perm'] = $results['permission'];
-               header('location: control.php');
-               $message="";
+               
+               header('location: status.php');
            } else {
                $message = "Invalid login credentials";
            }
@@ -53,17 +53,12 @@ if(isset($_POST['submit'])){
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">AstroTech</a>
+                <a class="navbar-brand">AstroTech</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <?php
-                        if($_SESSION['perm'] >= 2){
-                            echo "<li><a href=\"control.php\">Control</a></li>";
-                        }
-                    ?>
                     <li><a href="logout.php">Logout</a></li>
                     
                 </ul>

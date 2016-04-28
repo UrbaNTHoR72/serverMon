@@ -5,13 +5,10 @@
     $message = "no session";
 
     if (isset($_SESSION['perm'])){
-        if ($_SESSION['perm'] <= 2){
-            $message = "the perm is \"" . $_SESSION['perm'] . "\" so congrats";
-        }else{
+        if ($_SESSION['perm'] > 2){
             header('location: status.php');
-        }
-        
-    }else {
+        }       
+    } else {
         header('location: status.php');
     }
 ?>
@@ -27,9 +24,49 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     </head>
     <body>
-        <?php
-                echo "<p>" . $message . "<p>";
-        ?>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">AstroTech</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <?php
+                        if($_SESSION['perm'] >= 2){
+                            echo "<li><a href=\"control.php\">Control</a></li>";
+                        }
+                    ?>
+                    <li><a href="logout.php">Logout</a></li>
+                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <button type="button" class="btn btn-default btn-scr">Create User</button>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <button type="button" class="btn btn-default btn-scr">Add Server</button>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <button type="button" class="btn btn-default btn-scr">Edit Email Groups</button>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
         
