@@ -2,22 +2,38 @@
 
     session_start();
     
-    $message = "no session";
-
     if (isset($_SESSION['perm'])){
-        if ($_SESSION['perm'] > 2){
+        if($_SESSION['perm'] > 2){
             header('location: status.php');
-        }       
-    } else {
-        header('location: status.php');
+        }
+    }else{
+        header('location: login.php');
     }
     
+    require_once('../../connect/connect.php');
+    require_once('../../connect/password.php');
+    $message = "";
+    
+    if(isset($_POST['submit'])){
+        if($_POST['pass'] === $_POST['pass2']){
+            $sql = "INSERT INTO users (user_name,password,permission) VALUES (:user,:pass,:perm)";
+            $stmt = $conn->prepare($sql);
+            $pass = password_hash($_POST['pass'],PASSWORD_BCRYPT);
+            $stmt->bindParam(':user',$_POST['user']);
+            $stmt->bindParam(':pass',$pass);
+            $stmt->bindParam(':perm',$_POST['level']);
+            $stmt->execute() or die('failed to insert data');
+        }else{
+            $message = "passwords do not match";
+        }
+    }
+
 ?>
 
 <!doctype html>
 <html>
     <head>
-        <title>Control Panel</title>
+        <title>Create User</title>
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
@@ -55,25 +71,27 @@
             </div><!-- /.container-fluid -->
         </nav>
         
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="linkbtn">
-                        <a href="createUser.php">Create User<a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="linkbtn">
-                        <a href="#">Add Server<a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="linkbtn">
-                        <a href="#">Edit Email Groups<a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
+         <div class="container">
+            <form class="form-signin" method="POST" action="createUser.php">
+                <h2 class="form-signin-heading">Create a User</h2>
+                <label for="inputUser" class="sr-only">Username</label>
+                <input type="text" name="user" id="inputUser" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required>
+                <label for="inputPassword" class="sr-only">Confirm Password</label>
+                <input type="password" name="pass2" id="inputPassword2" class="form-control" placeholder="Confirm" required>
+                <select name="level">
+                    <option value="3">User</option>
+                    <option value="2">Admin</option>
+                </select>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create User</button>
+                <?php
+                    if($message != ""){
+                        echo "<p>" . $message . "</p>";
+                    } 
+                ?>
+            </form>
+        </div> <!-- /container -->
     </body>
 </html>
-        
