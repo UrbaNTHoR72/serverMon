@@ -57,13 +57,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-6 col-xs-12">
-                    <button type="button" class="btn btn-default btn-scr">Create User</button>
+                    <div class="linkbtn">
+                        <a href="#">Create User<a>
+                    </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12">
-                    <button type="button" class="btn btn-default btn-scr">Add Server</button>
+                    <div class="linkbtn">
+                        <a href="#">Add Server<a>
+                    </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12">
-                    <button type="button" class="btn btn-default btn-scr">Edit Email Groups</button>
+                    <div class="linkbtn">
+                        <a href="#">Edit Email Groups<a>
+                    </div>
                 </div>
             </div>
         </div>
