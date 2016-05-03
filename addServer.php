@@ -42,9 +42,19 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-        
-        
-        
-        
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <form>
+                        <input type="text" placeholder="Server id"/>
+                        <input type="submit" value="Delete"/>
+                    </form>
+                    
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                
+                </div>
+            </div>
+        </div>        
     </body>
 </html>
