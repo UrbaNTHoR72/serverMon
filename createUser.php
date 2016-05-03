@@ -16,13 +16,21 @@
     
     if(isset($_POST['submit'])){
         if($_POST['pass'] === $_POST['pass2']){
-            $sql = "INSERT INTO users (user_name,password,permission) VALUES (:user,:pass,:perm)";
+            $sql = "SELECT count(*) FROM users WHERE user_name = :user";
             $stmt = $conn->prepare($sql);
-            $pass = password_hash($_POST['pass'],PASSWORD_BCRYPT);
-            $stmt->bindParam(':user',$_POST['user']);
-            $stmt->bindParam(':pass',$pass);
-            $stmt->bindParam(':perm',$_POST['level']);
-            $stmt->execute() or die('failed to insert data');
+            $stmt->bindParam(':user', $_POST['user']);
+            $stmt->execute();
+            if ($stmt->fetchColumn() > 0){
+                $message = "Sorry that username is already taken";
+            } else {
+                $sql = "INSERT INTO users (user_name,password,permission) VALUES (:user,:pass,:perm)";
+                $stmt = $conn->prepare($sql);
+                $pass = password_hash($_POST['pass'],PASSWORD_BCRYPT);
+                $stmt->bindParam(':user',$_POST['user']);
+                $stmt->bindParam(':pass',$pass);
+                $stmt->bindParam(':perm',$_POST['level']);
+                $stmt->execute() or die('failed to insert data');
+            }
         }else{
             $message = "passwords do not match";
         }
@@ -58,14 +66,15 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-                        if($_SESSION['perm'] >= 2){
+                        if($_SESSION['perm'] <= 2){
                             echo "<li><a href=\"control.php\">Control</a></li>";
                         }
                     ?>
-                    <li><a href="logout.php">Logout</a></li>
                     
+                    <li><a href="status.php">Status</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php">Logout</a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->

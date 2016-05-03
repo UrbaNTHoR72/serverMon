@@ -42,14 +42,15 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-                        if($_SESSION['perm'] >= 2){
+                        if($_SESSION['perm'] <= 2){
                             echo "<li><a href=\"control.php\">Control</a></li>";
                         }
                     ?>
-                    <li><a href="logout.php">Logout</a></li>
                     
+                    <li><a href="status.php">Status</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php">Logout</a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -64,7 +65,7 @@
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="linkbtn">
-                        <a href="#">Add Server<a>
+                        <a href="addServer.php">Add Server<a>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12">

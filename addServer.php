@@ -1,5 +1,39 @@
 <?php
 
+    session_start();
+    
+    require_once('../../connect/connect.php');
+
+    if(isset($_SESSION['perm'])){
+        if($_SESSION['perm'] > 2){
+            header('location: status.php');
+        }
+    } else{
+        header('location: login.php');
+    }
+    
+    //delete server
+    if(isset($_POST['submit2'])){
+        $sql = "DELETE FROM servers WHERE server_id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $_POST['rem_server']);
+        $stmt->execute() or die('failed to remove entry from table');
+    }
+    
+    if(isset($_POST['submit'])){
+        $sql = "INSERT INTO servers (server_ip,port,label,type,status,run_time) VALUES (:serip,:port,:label,:type,'off',0.0)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':serip', $_POST['server_ip']);
+        $stmt->bindParam(':port', $_POST['port']);
+        $stmt->bindParam(':label', $_POST['server_name']);
+        $stmt->bindParam(':type', $_POST['type']);
+        
+        $stmt->execute() or die('failed to add new server');
+    
+    
+    }
+    
+    
 ?>
 
 <!doctype html>
@@ -30,14 +64,15 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-                        if($_SESSION['perm'] >= 2){
+                        if($_SESSION['perm'] <= 2){
                             echo "<li><a href=\"control.php\">Control</a></li>";
                         }
                     ?>
-                    <li><a href="logout.php">Logout</a></li>
+                    <li><a href="status.php">Status</a></li>
                     
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php">Logout</a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -45,15 +80,42 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
-                    <form>
-                        <input type="text" placeholder="Server id"/>
-                        <input type="submit" value="Delete"/>
-                    </form>
-                    
+                    <form method="POST" action="addServer.php">
+                        <ul>
+                            <li><label for="server_name">Server Name</label><input type="text" name="server_name"></li>
+                            <li><label for="server_ip">Server IP</label><input type="text" name="server_ip"></li>
+                            <li><label for="port">Port</label><input type="text" name="port"></li>
+                            <li>
+                                <label for="type">Server Type</label>
+                                <select name="type">
+                                    <option value="1">Website</option>
+                                    <option value="2">Service</option>
+                                </select>
+                            </li>
+                            <li><input type="submit" name="submit" value="Add Server"></li>
+                        </ul>
                 </div>
                 <div class="col-sm-6 col-xs-12">
-                
+                    <form method="POST" action="addSercer.php">
+                        <input type="text" placeholder="Server id" name="rem_server"/>
+                        <input type="submit" name="submit2" value="Delete"/>
+                    </form>
+                    <table>
+                        <?php
+                            $stat = "SELECT server_id,label,server_ip,status FROM servers";
+                            $results = $conn->prepare($stat);
+                            $results->execute() or die('failed to read servers from database');
+                            echo "<ul>";
+                            while($row = $results->fetch(PDO::FETCH_ASSOC)){
+                                echo "<li>" . $row['server_id'] . "</li><li>";
+                                echo "<ul><li>" . $row['label'] . "</li><li>" . $row['server_ip'] . "</li><li>" . $row['status'] . "</li></ul>";
+                                echo "</li>";
+                            }
+                            echo "</ul>";
+                        ?>
+                    </table>
                 </div>
+                
             </div>
         </div>        
     </body>
